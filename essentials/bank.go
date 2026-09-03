@@ -27,20 +27,26 @@ MainLoop:
 		case 1:
 			fmt.Println("Your balance is:", balance)
 		case 2:
-			updateBalance("deposit", &balance)
+			success := updateBalance("deposit", &balance)
+			if !success {
+				continue MainLoop
+			}
 		case 3:
-			updateBalance("withdraw", &balance)
+			success := updateBalance("withdraw", &balance)
+			if !success {
+				continue MainLoop
+			}
 		case 4:
 			fmt.Println("Thank you for using Go Bank!")
 			break MainLoop
 		default:
 			fmt.Println("Invalid choice")
-			continue
+			continue MainLoop
 		}
 	}
 }
 
-func updateBalance(typeOfTransaction string, balance *float64) {
+func updateBalance(typeOfTransaction string, balance *float64) bool {
 	// Get transaction amount
 	fmt.Print("How much do you want to ", typeOfTransaction, "?: ")
 	var transactionAmount float64
@@ -49,11 +55,11 @@ func updateBalance(typeOfTransaction string, balance *float64) {
 	// Validate entered amount
 	if transactionAmount <= 0 {
 		fmt.Println("Invalid amount. Please enter a positive number.")
-		return
+		return false
 	}
 	if typeOfTransaction == "withdraw" && transactionAmount > *balance {
 		fmt.Println("Insufficient funds. Your balance is:", *balance)
-		return
+		return false
 	}
 
 	// Update balance
@@ -64,4 +70,7 @@ func updateBalance(typeOfTransaction string, balance *float64) {
 	}
 
 	fmt.Println("Balance updated! Your new balance is:", *balance)
+
+	// Return true for successful update
+	return true
 }
