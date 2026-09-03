@@ -5,20 +5,26 @@ import "fmt"
 func calculateProfit() {
 	var revenue, expenses, taxRate float64
 
-	fmt.Print("Revenue: ")
-	fmt.Scan(&revenue)
+	revenue = getInput("Revenue: ")
+	expenses = getInput("Expenses: ")
+	taxRate = getInput("Tax Rate: ")
 
-	fmt.Print("Expenses: ")
-	fmt.Scan(&expenses)
+	ebt, profit, ratio := calculateFinancials(revenue, expenses, taxRate)
 
-	fmt.Print("Tax Rate: ")
-	fmt.Scan(&taxRate)
+	fmt.Printf("EBT: %.2f\n", ebt)
+	fmt.Printf("Profit: %.2f\n", profit)
+	fmt.Printf("Ratio: %.2f\n", ratio)
+}
 
-	ebt := revenue - expenses
-	profit := ebt * (1 - taxRate/100)
-	ratio := ebt / profit
+func getInput(label string) (value float64) {
+	fmt.Print(label)
+	fmt.Scan(&value)
+	return
+}
 
-	fmt.Println("EBT:", ebt)
-	fmt.Println("Profit:", profit)
-	fmt.Println("Ratio:", ratio)
+func calculateFinancials(revenue, expenses, taxRate float64) (ebt, profit, ratio float64) {
+	ebt = revenue - expenses
+	profit = ebt * (1 - taxRate/100)
+	ratio = ebt / profit
+	return
 }
