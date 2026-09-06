@@ -28,7 +28,7 @@ func main() {
 
 	// ... do something awesome with that gathered data!
 
-	fmt.Println(firstName, lastName, birthdate)
+	outputUserData(&appUser)
 }
 
 func getUserData(promptText string) string {
@@ -36,4 +36,11 @@ func getUserData(promptText string) string {
 	var value string
 	fmt.Scan(&value)
 	return value
+}
+
+func outputUserData(outputUser *user) {
+	fmt.Println("FirstName: ", outputUser.firstName)
+	fmt.Println("LastName: ", outputUser.lastName)
+	fmt.Println("Birthdate: ", outputUser.birthdate)
+	fmt.Println("CreatedAt: ", outputUser.createdAt)
 }
