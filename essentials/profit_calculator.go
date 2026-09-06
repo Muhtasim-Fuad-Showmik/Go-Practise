@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"os"
 )
@@ -9,21 +10,24 @@ const profitCalculatorFile = "profit_calculator.txt"
 
 func calculateProfit() {
 	var revenue, expenses, taxRate float64
+	var err error
 
-	revenue = getInput("Revenue: ")
-	if revenue <= 0 {
-		panic("Revenue must be greater than 0")
-	}
-	expenses = getInput("Expenses: ")
-	if expenses <= 0 {
-		panic("Expenses must be greater than 0")
-	}
-	taxRate = getInput("Tax Rate: ")
-	if taxRate <= 0 {
-		panic("Tax Rate must be greater than 0")
+	for _, label := range []string{"Revenue: ", "Expenses: ", "Tax Rate: "} {
+		var value float64
+		value, err = getInput(label, true)
+		if err != nil {
+			panic(err)
+		}
+		switch label {
+		case "Revenue: ":
+			revenue = value
+		case "Expenses: ":
+			expenses = value
+		case "Tax Rate: ":
+			taxRate = value
+		}
 	}
 
-	// Store calculated results into file
 	ebt, profit, ratio := calculateFinancials(revenue, expenses, taxRate)
 
 	fmt.Printf("EBT: %.2f\n", ebt)
@@ -33,9 +37,14 @@ func calculateProfit() {
 	writeResultsToFile(ebt, profit, ratio)
 }
 
-func getInput(label string) (value float64) {
+func getInput(label string, onlyPositive bool) (value float64, err error) {
 	fmt.Print(label)
 	fmt.Scan(&value)
+
+	if onlyPositive && value <= 0 {
+		return 0, errors.New("Value must be greater than 0")
+	}
+
 	return
 }
 
