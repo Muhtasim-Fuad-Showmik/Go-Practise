@@ -1,17 +1,16 @@
 package main
 
 import (
-	"errors"
 	"fmt"
-	"os"
-	"strconv"
+
+	"example.com/essentials/fileops"
 )
 
 const accountBalanceFile = "balance.txt"
 
 func initBanking() {
 	// Definitions
-	balance, err := getBalanceFromFile()
+	balance, err := fileops.GetFloatFromFile(accountBalanceFile)
 	if err != nil {
 		fmt.Println("ERROR")
 		fmt.Println(err)
@@ -53,30 +52,6 @@ MainLoop:
 	}
 }
 
-func writeBalanceToFile(balance float64) {
-	// Write balance to file
-	balanceText := fmt.Sprintf("%.2f", balance)
-	os.WriteFile(accountBalanceFile, []byte(balanceText), 0644)
-	fmt.Printf("Balance of %.2f written to file: %s\n", balance, accountBalanceFile)
-}
-
-func getBalanceFromFile() (float64, error) {
-	data, err := os.ReadFile(accountBalanceFile)
-
-	if err != nil {
-		return 0, errors.New("Failed to read balance file.")
-	}
-
-	balanceText := string(data)
-	balance, err := strconv.ParseFloat(balanceText, 64)
-
-	if err != nil {
-		return 0, errors.New("Failed to parse stored balance value.")
-	}
-
-	return balance, nil
-}
-
 func updateBalance(typeOfTransaction string, balance *float64) bool {
 	// Get transaction amount
 	fmt.Print("How much do you want to ", typeOfTransaction, "?: ")
@@ -96,10 +71,10 @@ func updateBalance(typeOfTransaction string, balance *float64) bool {
 	// Update balance
 	if typeOfTransaction == "deposit" {
 		*balance += transactionAmount
-		writeBalanceToFile(*balance)
+		fileops.WriteFloatToFile(*balance, accountBalanceFile)
 	} else {
 		*balance -= transactionAmount
-		writeBalanceToFile(*balance)
+		fileops.WriteFloatToFile(*balance, accountBalanceFile)
 	}
 
 	fmt.Println("Balance updated! Your new balance is:", *balance)
