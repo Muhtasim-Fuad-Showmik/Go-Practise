@@ -13,6 +13,25 @@ type User struct {
 	createdAt time.Time
 }
 
+type Admin struct {
+	email    string
+	password string
+	User
+}
+
+func NewAdmin(email, password string) *Admin {
+	return &Admin{
+		email:    email,
+		password: password,
+		User: User{
+			firstName: "ADMIN",
+			lastName:  "ADMIN",
+			birthdate: "---",
+			createdAt: time.Now(),
+		},
+	}
+}
+
 func New(firstName, lastName, birthdate string) (*User, error) {
 	if firstName == "" || lastName == "" || birthdate == "" {
 		return nil, errors.New("All fields are required")
