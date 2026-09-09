@@ -78,3 +78,14 @@ func outputData(o outputtable) error {
 	o.Display()
 	return saveData(o)
 }
+
+func printTypesOfValues(value any) {
+	switch value.(type) {
+	case string:
+		fmt.Println("String: ", value)
+	case int, float64:
+		fmt.Println("Number: ", value)
+	default:
+		fmt.Println("Unknown type")
+	}
+}
