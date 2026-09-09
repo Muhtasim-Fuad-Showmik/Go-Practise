@@ -80,12 +80,28 @@ func outputData(o outputtable) error {
 }
 
 func printTypesOfValues(value any) {
-	switch value.(type) {
-	case string:
-		fmt.Println("String: ", value)
-	case int, float64:
-		fmt.Println("Number: ", value)
-	default:
-		fmt.Println("Unknown type")
+	// switch value.(type) {
+	// case string:
+	// 	fmt.Println("String: ", value)
+	// case int, float64:
+	// 	fmt.Println("Number: ", value)
+	// default:
+	// 	fmt.Println("Unknown type")
+	// }
+	intVal, ok := value.(int)
+	if ok {
+		fmt.Println("Integer:", intVal)
+		return
 	}
+	floatVal, ok := value.(float64)
+	if ok {
+		fmt.Println("Float:", floatVal)
+		return
+	}
+	stringVal, ok := value.(string)
+	if ok {
+		fmt.Println("String:", stringVal)
+		return
+	}
+	fmt.Println("Unknown type")
 }
