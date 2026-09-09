@@ -7,7 +7,17 @@ import (
 	"strings"
 
 	"example.com/note/note"
+	"example.com/note/todo"
 )
+
+type saver interface {
+	Save() error
+}
+
+type outputtable interface {
+	saver // Embedded interface
+	Display()
+}
 
 func main() {
 	title, content := getNoteData()
@@ -16,13 +26,21 @@ func main() {
 		panic(err)
 	}
 
-	userNote.Display()
-	err = userNote.Save()
+	err = outputData(userNote)
 	if err != nil {
-		panic("💣 Saving the note failed!")
+		panic("💣 Saving the data failed!" + err.Error())
 	}
 
-	fmt.Println("💾 Saving the note succeeded!")
+	todoText := getUserInput("Todo text:")
+	todo, err := todo.New(todoText)
+	if err != nil {
+		panic(err)
+	}
+
+	err = outputData(todo)
+	if err != nil {
+		panic("💣 Saving the data failed!" + err.Error())
+	}
 }
 
 func getNoteData() (string, string) {
@@ -44,4 +62,19 @@ func getUserInput(prompt string) string {
 	value = strings.TrimSuffix(value, "\r")
 
 	return value
+}
+
+func saveData(s saver) error {
+	err := s.Save()
+	if err != nil {
+		return err
+	}
+
+	fmt.Println("💾 Saving the data succeeded!")
+	return nil
+}
+
+func outputData(o outputtable) error {
+	o.Display()
+	return saveData(o)
 }
