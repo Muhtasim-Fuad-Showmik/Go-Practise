@@ -36,4 +36,24 @@ func main() {
 	// Slicing an array in the end
 	featuredPrices = prices[1:]
 	fmt.Println(featuredPrices)
+
+	// Update all references to array data by updating slices
+	featuredPrices[0] = 199.99
+	fmt.Println(prices)
+
+	// Array operations
+	fmt.Println(len(featuredPrices), cap(featuredPrices))
+
+	highlightedPrices = highlightedPrices[1:3]
+	fmt.Println("Highlighted Prices:")
+	fmt.Println(len(highlightedPrices), cap(highlightedPrices))
+
+	fmt.Println("Dynamic Arrays:")
+	// Array without any predefined length restriction
+	dynamicPrices := []float64{10.99, 6.99}
+
+	// Adding new values to the array
+	updatedPrices := append(dynamicPrices, 5.99)
+
+	fmt.Println(updatedPrices)
 }
