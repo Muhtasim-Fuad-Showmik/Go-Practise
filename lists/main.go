@@ -28,6 +28,8 @@ func main() {
 	fmt.Println(featuredPrices)
 
 	// Slicing an array in the start
+	highlightedPrices := featuredPrices[:1]
+	fmt.Println(highlightedPrices)
 	featuredPrices = prices[:3]
 	fmt.Println(featuredPrices)
 
