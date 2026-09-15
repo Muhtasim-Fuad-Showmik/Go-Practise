@@ -23,8 +23,15 @@ func main() {
 	// Output first value of the array
 	fmt.Println(prices[0])
 
-	// Slicing an array
+	// Slicing an array in the middle
 	featuredPrices := prices[1:3]
+	fmt.Println(featuredPrices)
 
+	// Slicing an array in the start
+	featuredPrices = prices[:3]
+	fmt.Println(featuredPrices)
+
+	// Slicing an array in the end
+	featuredPrices = prices[1:]
 	fmt.Println(featuredPrices)
 }
