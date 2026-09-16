@@ -2,58 +2,27 @@ package main
 
 import "fmt"
 
-type Product struct {
-	id    string
-	title string
-	price float64
-}
-
 func main() {
-	// Array Definitions
-	prices := [4]float64{10.99, 9.99, 45.99, 20.0}
-	var productNames [4]string = [4]string{"A Book"}
+	// Create an array with length 2 (with both elements being set to null)
+	// and allocating 5 slots for the array
+	userNames := make([]string, 2, 5)
 
-	// Array value assignment at an index
-	productNames[2] = "A Carpet"
+	// Replace null with actual values
+	userNames[0] = "Julie"
+	userNames[1] = "John"
 
-	// Output entire arrays
-	fmt.Println(prices)
-	fmt.Println(productNames)
+	// Add more values to the array
+	userNames = append(userNames, "Max")
+	userNames = append(userNames, "Manuel")
 
-	// Output first value of the array
-	fmt.Println(prices[0])
+	fmt.Println(userNames)
 
-	// Slicing an array in the middle
-	featuredPrices := prices[1:3]
-	fmt.Println(featuredPrices)
+	// Make a map with 3 spaces allocated for it
+	courseRatings := make(map[string]float64, 3)
 
-	// Slicing an array in the start
-	highlightedPrices := featuredPrices[:1]
-	fmt.Println(highlightedPrices)
-	featuredPrices = prices[:3]
-	fmt.Println(featuredPrices)
+	courseRatings["go"] = 4.7
+	courseRatings["react"] = 5.7
+	courseRatings[".NET"] = 7.7
 
-	// Slicing an array in the end
-	featuredPrices = prices[1:]
-	fmt.Println(featuredPrices)
-
-	// Update all references to array data by updating slices
-	featuredPrices[0] = 199.99
-	fmt.Println(prices)
-
-	// Array operations
-	fmt.Println(len(featuredPrices), cap(featuredPrices))
-
-	highlightedPrices = highlightedPrices[1:3]
-	fmt.Println("Highlighted Prices:")
-	fmt.Println(len(highlightedPrices), cap(highlightedPrices))
-
-	fmt.Println("Dynamic Arrays:")
-	// Array without any predefined length restriction
-	dynamicPrices := []float64{10.99, 6.99}
-
-	// Adding new values to the array
-	updatedPrices := append(dynamicPrices, 5.99)
-
-	fmt.Println(updatedPrices)
+	fmt.Println(courseRatings)
 }
