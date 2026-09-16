@@ -2,6 +2,12 @@ package main
 
 import "fmt"
 
+type floatMap map[string]float64
+
+func (m floatMap) output() {
+	fmt.Println(m)
+}
+
 func main() {
 	// Create an array with length 2 (with both elements being set to null)
 	// and allocating 5 slots for the array
@@ -18,11 +24,11 @@ func main() {
 	fmt.Println(userNames)
 
 	// Make a map with 3 spaces allocated for it
-	courseRatings := make(map[string]float64, 3)
+	courseRatings := make(floatMap, 3)
 
 	courseRatings["go"] = 4.7
 	courseRatings["react"] = 5.7
 	courseRatings[".NET"] = 7.7
 
-	fmt.Println(courseRatings)
+	courseRatings.output()
 }
