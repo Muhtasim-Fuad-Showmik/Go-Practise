@@ -3,25 +3,18 @@ package main
 import "fmt"
 
 func main() {
-	loopFactorialResult := loopFactorial(5)
-	recursiveFactorialResult := recursiveFactorial(5)
-	fmt.Println(loopFactorialResult)
-	fmt.Println(recursiveFactorialResult)
+	sum := sumUp(1, 10, 15)
+
+	fmt.Println(sum)
 }
 
-func loopFactorial(number int) int {
-	result := 1
+// Variadic Function: A function where the number of parameters is dynamic and therefore can vary
+func sumUp(numbers ...int) int {
+	sum := 0
 
-	for i := 1; i <= number; i++ {
-		result = result * i
+	for _, val := range numbers {
+		sum += val
 	}
 
-	return result
-}
-
-func recursiveFactorial(number int) int {
-	if number == 1 {
-		return 1
-	}
-	return number * recursiveFactorial(number-1)
+	return sum
 }
