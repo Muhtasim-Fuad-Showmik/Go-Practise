@@ -2,44 +2,26 @@ package main
 
 import "fmt"
 
-// For complex functions defining custom function types can save characters
-// from being repeatedly typed and maintained
-type transformFn func(int) int
-
 func main() {
-	numbers := []int{1, 2, 3, 4}
-
-	double := createTransformer(2)
-	triple := createTransformer(3)
-
-	transformedNumbers := transformNumbers(&numbers, func(number int) int {
-		return number * 2
-	})
-
-	fmt.Println(transformedNumbers)
-
-	// Closeure: Closes created function via variable passed into factory method
-	// Generated functions remain unaffected by multiple calls of the factory functions
-	doubled := transformNumbers(&numbers, double)
-	tripled := transformNumbers(&numbers, triple)
-
-	fmt.Println(doubled)
-	fmt.Println(tripled)
+	loopFactorialResult := loopFactorial(5)
+	recursiveFactorialResult := recursiveFactorial(5)
+	fmt.Println(loopFactorialResult)
+	fmt.Println(recursiveFactorialResult)
 }
 
-// Passing functions as values into the parameters for another function
-func transformNumbers(numbers *[]int, transform transformFn) []int {
-	tNumbers := []int{}
-	for _, val := range *numbers {
-		tNumbers = append(tNumbers, transform(val))
+func loopFactorial(number int) int {
+	result := 1
+
+	for i := 1; i <= number; i++ {
+		result = result * i
 	}
 
-	return tNumbers
+	return result
 }
 
-// Factory function for producing transformer functions
-func createTransformer(factor int) func(int) int {
-	return func(number int) int {
-		return number * factor
+func recursiveFactorial(number int) int {
+	if number == 1 {
+		return 1
 	}
+	return number * recursiveFactorial(number-1)
 }
