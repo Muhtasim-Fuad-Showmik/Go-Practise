@@ -10,8 +10,13 @@ import (
 
 func main() {
 	taxRates := []float64{0, 0.07, 0.1, 0.15}
+	doneChans := make([]chan bool, len(taxRates))
+	errorChans := make([]chan error, len(taxRates))
 
-	for _, taxRate := range taxRates {
+	for index, taxRate := range taxRates {
+		doneChans[index] = make(chan bool)
+		errorChans[index] = make(chan error)
+
 		// For file processing
 		fm := filemanager.New("prices.txt", fmt.Sprintf("tax_included_prices_%.0f.json", taxRate*100))
 		priceJob := prices.NewTaxIncludedPriceJob(fm, taxRate)
@@ -20,9 +25,18 @@ func main() {
 		// cmdm := cmdmanager.New()
 		// priceJob := prices.NewTaxIncludedPriceJob(cmdm, taxRate)
 
-		err := priceJob.Process()
-		if err != nil {
-			panic("Could not process prices: " + err.Error())
+		go priceJob.Process(doneChans[index], errorChans[index])
+	}
+
+	for index, taxRate := range taxRates {
+		// `select` waits for whichever channels earlier but does not wait for the other channel
+		select {
+		case err := <-errorChans[index]:
+			if err != nil {
+				panic("Could not process prices: " + err.Error())
+			}
+		case <-doneChans[index]:
+			fmt.Println("Done processing prices for tax rate:", taxRate)
 		}
 	}
 }
