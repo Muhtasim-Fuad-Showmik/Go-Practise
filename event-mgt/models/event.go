@@ -1,13 +1,15 @@
 package models
 
-import "time"
+import (
+	"time"
+)
 
 type Event struct {
 	ID          int       `json:"id"`
-	Title       string    `json:"title"`
-	Description string    `json:"description"`
-	Location    string    `json:"location"`
-	DateTime    time.Time `json:"datetime"`
+	Title       string    `json:"title" binding:"required"`
+	Description string    `json:"description" binding:"required"`
+	Location    string    `json:"location" binding:"required"`
+	DateTime    time.Time `json:"datetime" binding:"required"`
 	UserID      int       `json:"user_id"`
 }
 
