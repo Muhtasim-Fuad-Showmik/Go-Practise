@@ -5,7 +5,6 @@ import (
 	"strconv"
 
 	"example.com/event-mgt/models"
-	"example.com/event-mgt/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -48,26 +47,10 @@ func getEvent(context *gin.Context) {
 }
 
 func createEvent(context *gin.Context) {
-	authHeader := context.Request.Header.Get("Authorization")
-	if authHeader == "" {
-		context.JSON(http.StatusUnauthorized, gin.H{
-			"message": "Not authorized",
-		})
-		return
-	}
-
-	err := utils.VerifyToken(authHeader)
-	if err != nil {
-		context.JSON(http.StatusUnauthorized, gin.H{
-			"message": "Not authorized",
-		})
-		return
-	}
-
 	var event models.Event
 
 	// Bind JSON and validate using Gin
-	err = context.ShouldBindJSON(&event)
+	err := context.ShouldBindJSON(&event)
 
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{
@@ -76,8 +59,8 @@ func createEvent(context *gin.Context) {
 		return
 	}
 
-	// Set default values
-	event.UserID = 1
+	// Set user ID from token
+	event.UserID = context.GetInt64("userId")
 
 	// Save event and return response
 	err = models.Save(&event)

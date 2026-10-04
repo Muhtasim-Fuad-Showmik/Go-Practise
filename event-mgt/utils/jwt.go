@@ -20,7 +20,7 @@ func GenerateToken(name string, email string, userId int64) (string, error) {
 	return token.SignedString([]byte(secretKey))
 }
 
-func VerifyToken(tokenString string) error {
+func VerifyToken(tokenString string) (int64, error) {
 	parsedToken, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, errors.New("Unexpected signing method")
@@ -29,27 +29,25 @@ func VerifyToken(tokenString string) error {
 	})
 
 	if err != nil {
-		return errors.New("Could not parse token.")
+		return 0, errors.New("Could not parse token.")
 	}
 
 	tokenIsValid := parsedToken.Valid
 
 	if !tokenIsValid {
-		return errors.New("Invalid token!")
+		return 0, errors.New("Invalid token!")
 	}
 
 	/**
 	** Note: If you wish to parse token and extract user info from the token
 	** that can be done by using the following code.
 	**/
-	// claims, ok := parsedToken.Claims.(jwt.MapClaims)
-	// if !ok {
-	// 	return errors.New("Invalid token claims!")
-	// }
+	claims, ok := parsedToken.Claims.(jwt.MapClaims)
+	if !ok {
+		return 0, errors.New("Invalid token claims!")
+	}
 
-	// email := claims["email"].(string)
-	// name := claims["name"].(string)
-	// userId := claims["userId"].(int64)
+	userId := int64(claims["userId"].(float64))
 
-	return nil
+	return userId, nil
 }
