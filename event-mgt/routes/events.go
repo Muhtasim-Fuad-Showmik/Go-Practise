@@ -60,11 +60,10 @@ func createEvent(context *gin.Context) {
 	}
 
 	// Set default values
-	event.ID = 1
 	event.UserID = 1
 
 	// Save event and return response
-	err = models.Save(event)
+	err = models.Save(&event)
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{
 			"message": "Failed to create event",
@@ -119,5 +118,38 @@ func updateEvent(context *gin.Context) {
 	context.JSON(http.StatusOK, gin.H{
 		"event":   updatedEvent,
 		"message": "Event updated successfully!",
+	})
+}
+
+func deleteEvent(context *gin.Context) {
+	eventId, err := strconv.ParseInt(context.Param("id"), 10, 64)
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{
+			"message": "Invalid request body",
+		})
+		return
+	}
+
+	event, err := models.GetEventByID(eventId)
+
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Failed to fetch event",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	err = event.Delete()
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{
+			"message": "Failed to delete event",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	context.JSON(http.StatusOK, gin.H{
+		"message": "Event deleted successfully!",
 	})
 }
